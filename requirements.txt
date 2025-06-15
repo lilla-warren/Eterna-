@@ -3,3 +3,4 @@ pandas
 matplotlib
 plotly
 streamlit==1.25.0
+pip install -r requirements.txt
