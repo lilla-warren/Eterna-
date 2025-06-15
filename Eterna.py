@@ -1,5 +1,7 @@
 # Eterna: AI-Powered Smart Energy Advisor
 # Streamlit-based prototype
+pip install -r requirements.txt
+streamlit run app.py
 
 import streamlit as st
 import pandas as pd
