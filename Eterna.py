@@ -45,18 +45,16 @@ if not st.session_state.registered:
         eco_mode = st.checkbox("Enable Eco Mode")
         submit = st.form_submit_button("Start Saving")
 
-    if submit:
-        st.session_state.user_prefs = {
-            "name": name,
-            "home_size": home_size,
-            "working_hours": working_hours,
-            "ac_temp": ac_pref,
-            "eco_mode": eco_mode
-        }
-        st.session_state.registered = True
-        st.success("Welcome, " + name + "! Eterna is setting up your dashboard...")
-        time.sleep(1)
-       st.rerun()
+if submit:
+    st.session_state.user_prefs = {
+        "name": name,
+        "home_size": home_size,
+        "working_hours": working_hours,
+        "ac_temp": ac_pref,
+        "eco_mode": eco_mode
+    }
+    st.session_state.registered = True
+
 
 else:
     # --- 2. Real-Time Energy Dashboard ---
