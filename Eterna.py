@@ -62,7 +62,8 @@ else:
     st.sidebar.title("⚙️ Settings")
     if st.sidebar.button("Reset Setup"):
         st.session_state.registered = False
-        st.experimental_rerun()
+       st.rerun()
+
 
     st.title("⚡ Eterna Dashboard")
     st.write("Welcome back, **{}**!".format(st.session_state.user_prefs["name"]))
