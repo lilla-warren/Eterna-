@@ -56,7 +56,8 @@ if not st.session_state.registered:
         st.session_state.registered = True
         st.success("Welcome, " + name + "! Eterna is setting up your dashboard...")
         time.sleep(1)
-        st.experimental_rerun()
+       st.rerun()
+
 else:
     # --- 2. Real-Time Energy Dashboard ---
     st.sidebar.title("⚙️ Settings")
