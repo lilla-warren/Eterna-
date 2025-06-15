@@ -1,7 +1,5 @@
-# Eterna: AI-Powered Smart Energy Advisor
+#Eterna: AI-Powered Smart Energy Advisor
 # Streamlit-based prototype
-pip install -r requirements.txt
-streamlit run app.py
 
 import streamlit as st
 import pandas as pd
@@ -28,7 +26,7 @@ def get_ai_suggestions(usage, prefs):
         suggestions.append("Switch to eco-mode lighting in hallways.")
     return suggestions
 
-# --- Session State Initialization ---
+# --- Session State for User Info ---
 if "registered" not in st.session_state:
     st.session_state.registered = False
 if "user_prefs" not in st.session_state:
@@ -56,18 +54,19 @@ if not st.session_state.registered:
             "eco_mode": eco_mode
         }
         st.session_state.registered = True
-
-# --- 2. Dashboard & Other Features ---
+        st.success("Welcome, " + name + "! Eterna is setting up your dashboard...")
+        time.sleep(1)
+        st.experimental_rerun()
 else:
+    # --- 2. Real-Time Energy Dashboard ---
     st.sidebar.title("⚙️ Settings")
     if st.sidebar.button("Reset Setup"):
         st.session_state.registered = False
-        st.rerun()
+        st.experimental_rerun()
 
     st.title("⚡ Eterna Dashboard")
-    st.write(f"Welcome back, **{st.session_state.user_prefs['name']}**!")
+    st.write("Welcome back, **{}**!".format(st.session_state.user_prefs["name"]))
 
-    # Real-Time Energy Usage
     st.header("🔌 Real-Time Energy Usage")
     usage = generate_mock_usage()
     total_usage = sum(usage.values())
@@ -75,13 +74,13 @@ else:
     st.metric("Total Energy Used (kWh)", total_usage)
     st.bar_chart(pd.DataFrame(usage.values(), index=usage.keys(), columns=["kWh"]))
 
-    # Smart Advisor
+    # --- 3. Smart Advisor ---
     st.header("🧠 Smart Suggestions")
     suggestions = get_ai_suggestions(usage, st.session_state.user_prefs)
     for s in suggestions:
         st.success("💡 " + s)
 
-    # Impact & Rewards
+    # --- 4. Impact & Rewards ---
     st.header("🌍 Impact & Rewards")
     savings = round(total_usage * random.uniform(0.5, 1.5), 2)
     carbon_saved = round(total_usage * 0.42, 2)
@@ -95,7 +94,7 @@ else:
     st.progress(min(1.0, savings / 10))
     st.caption("Reach 10 AED to earn your next 🌟")
 
-    # Simulation Mode
+    # --- 5. Simulation Mode ---
     st.header("🧪 Simulation Mode")
     sim_ac = st.slider("AC Usage (kWh)", 0.5, 5.0, usage["AC"])
     sim_lights = st.slider("Lights Usage (kWh)", 0.1, 1.0, usage["Lights"])
