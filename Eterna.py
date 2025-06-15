@@ -1,4 +1,4 @@
-#Eterna: AI-Powered Smart Energy Advisor
+# Eterna: AI-Powered Smart Energy Advisor
 # Streamlit-based prototype
 
 import streamlit as st
@@ -26,7 +26,7 @@ def get_ai_suggestions(usage, prefs):
         suggestions.append("Switch to eco-mode lighting in hallways.")
     return suggestions
 
-# --- Session State for User Info ---
+# --- Session State Initialization ---
 if "registered" not in st.session_state:
     st.session_state.registered = False
 if "user_prefs" not in st.session_state:
@@ -45,28 +45,27 @@ if not st.session_state.registered:
         eco_mode = st.checkbox("Enable Eco Mode")
         submit = st.form_submit_button("Start Saving")
 
-if submit:
-    st.session_state.user_prefs = {
-        "name": name,
-        "home_size": home_size,
-        "working_hours": working_hours,
-        "ac_temp": ac_pref,
-        "eco_mode": eco_mode
-    }
-    st.session_state.registered = True
+    if submit:
+        st.session_state.user_prefs = {
+            "name": name,
+            "home_size": home_size,
+            "working_hours": working_hours,
+            "ac_temp": ac_pref,
+            "eco_mode": eco_mode
+        }
+        st.session_state.registered = True
 
-
+# --- 2. Dashboard & Other Features ---
 else:
-    # --- 2. Real-Time Energy Dashboard ---
     st.sidebar.title("⚙️ Settings")
-if st.sidebar.button("Reset Setup"):
-    st.session_state.registered = False
-    st.rerun()
-
+    if st.sidebar.button("Reset Setup"):
+        st.session_state.registered = False
+        st.rerun()
 
     st.title("⚡ Eterna Dashboard")
-    st.write("Welcome back, **{}**!".format(st.session_state.user_prefs["name"]))
+    st.write(f"Welcome back, **{st.session_state.user_prefs['name']}**!")
 
+    # Real-Time Energy Usage
     st.header("🔌 Real-Time Energy Usage")
     usage = generate_mock_usage()
     total_usage = sum(usage.values())
@@ -74,13 +73,13 @@ if st.sidebar.button("Reset Setup"):
     st.metric("Total Energy Used (kWh)", total_usage)
     st.bar_chart(pd.DataFrame(usage.values(), index=usage.keys(), columns=["kWh"]))
 
-    # --- 3. Smart Advisor ---
+    # Smart Advisor
     st.header("🧠 Smart Suggestions")
     suggestions = get_ai_suggestions(usage, st.session_state.user_prefs)
     for s in suggestions:
         st.success("💡 " + s)
 
-    # --- 4. Impact & Rewards ---
+    # Impact & Rewards
     st.header("🌍 Impact & Rewards")
     savings = round(total_usage * random.uniform(0.5, 1.5), 2)
     carbon_saved = round(total_usage * 0.42, 2)
@@ -94,7 +93,7 @@ if st.sidebar.button("Reset Setup"):
     st.progress(min(1.0, savings / 10))
     st.caption("Reach 10 AED to earn your next 🌟")
 
-    # --- 5. Simulation Mode ---
+    # Simulation Mode
     st.header("🧪 Simulation Mode")
     sim_ac = st.slider("AC Usage (kWh)", 0.5, 5.0, usage["AC"])
     sim_lights = st.slider("Lights Usage (kWh)", 0.1, 1.0, usage["Lights"])
