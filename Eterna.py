@@ -59,9 +59,9 @@ if submit:
 else:
     # --- 2. Real-Time Energy Dashboard ---
     st.sidebar.title("⚙️ Settings")
-    if st.sidebar.button("Reset Setup"):
-        st.session_state.registered = False
-       st.rerun()
+if st.sidebar.button("Reset Setup"):
+    st.session_state.registered = False
+    st.rerun()
 
 
     st.title("⚡ Eterna Dashboard")
