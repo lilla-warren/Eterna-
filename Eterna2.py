@@ -162,7 +162,10 @@ if __name__ == "__main__":
     main()
 
 st.title("⚡ Eterna Dashboard")
-st.write("Welcome back, **{}**!".format(st.session_state.user_prefs["name"]))
+if "user_prefs" in st.session_state and "name" in st.session_state.user_prefs:
+    st.write(f"Welcome back, **{st.session_state.user_prefs['name']}**!")
+else:
+    st.write("Welcome back!")
 
 st.header("🔌 Real-Time Energy Usage")
 usage = generate_mock_usage()
