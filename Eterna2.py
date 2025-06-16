@@ -10,19 +10,26 @@ import time
 import pytz
 import random
 
+# --- Helper Functions ---
+
 def generate_mock_usage():
     return {
         "AC": round(random.uniform(1.5, 3.0), 2),
         "Lights": round(random.uniform(0.3, 0.6), 2),
         "Appliances": round(random.uniform(0.5, 1.0), 2)
     }
-# --- Session State Initialization ---
-if "registered" not in st.session_state:
-    st.session_state.registered = False
-if "user_prefs" not in st.session_state:
-    st.session_state.user_prefs = {}
-if "usage_history" not in st.session_state:
-    st.session_state.usage_history = []
+
+def get_ai_suggestions(usage, prefs):
+    suggestions = []
+    if usage["AC"] > 2.5:
+        suggestions.append("Turn off AC in Room 2 — no activity detected.")
+        suggestions.append("Fan + 1° higher AC temp = same comfort, lower cost.")
+    if datetime.now().hour < 12:
+        suggestions.append("Delay laundry to off-peak hours (saves 1.5 AED).")
+    if prefs.get("eco_mode"):
+        suggestions.append("Switch to eco-mode lighting in hallways.")
+    return suggestions
+
 
 # ========================
 # 🏗️ CORE SYSTEM SETUP
