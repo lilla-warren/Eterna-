@@ -160,3 +160,64 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+st.title("⚡ Eterna Dashboard")
+st.write("Welcome back, **{}**!".format(st.session_state.user_prefs["name"]))
+
+st.header("🔌 Real-Time Energy Usage")
+usage = generate_mock_usage()
+total_usage = sum(usage.values())
+
+st.session_state.usage_history.append(total_usage)
+
+st.metric("Total Energy Used (kWh)", total_usage)
+st.bar_chart(pd.DataFrame(usage.values(), index=usage.keys(), columns=["kWh"]))
+
+# --- Azure ML Simulated Prediction ---
+if len(st.session_state.usage_history) > 2:
+    predicted = train_and_predict_energy(st.session_state.usage_history)
+    st.info(f"🔮 Predicted Tomorrow's Energy Usage (via Azure ML): **{predicted} kWh**")
+
+# --- 3. Smart Advisor ---
+st.header("🧠 Smart Suggestions")
+suggestions = get_ai_suggestions(usage, st.session_state.user_prefs)
+arabic_mode = st.checkbox("🔁 Show Arabic Suggestions")
+
+translations = {
+    "Turn off AC in Room 2 — no activity detected.": "أطفئ التكييف في الغرفة 2 — لا يوجد نشاط.",
+    "Fan + 1° higher AC temp = same comfort, lower cost.": "استخدم المروحة وارفع حرارة التكييف بدرجة واحدة — نفس الراحة وتكلفة أقل.",
+    "Delay laundry to off-peak hours (saves 1.5 AED).": "أجل الغسيل إلى ساعات خارج الذروة لتوفير 1.5 درهم.",
+    "Switch to eco-mode lighting in hallways.": "فعّل وضع الإضاءة الاقتصادية في الممرات."
+}
+
+for s in suggestions:
+    st.success("💡 " + (translations[s] if arabic_mode and s in translations else s))
+
+# --- 4. Impact & Rewards ---
+st.header("🌍 Impact & Rewards")
+savings = round(total_usage * random.uniform(0.5, 1.5), 2)
+carbon_saved = round(total_usage * 0.42, 2)
+trees_equivalent = round(carbon_saved / 20, 2)
+
+col1, col2, col3 = st.columns(3)
+col1.metric("💰 AED Saved", f"{savings}")
+col2.metric("🌱 CO₂ Saved (kg)", f"{carbon_saved}")
+col3.metric("🌳 Trees Equivalent", f"{trees_equivalent}")
+
+st.progress(min(1.0, savings / 10))
+st.caption("Reach 10 AED to earn your next 🌟")
+
+# --- 5. Simulation Mode ---
+st.header("🧪 Simulation Mode")
+sim_ac = st.slider("AC Usage (kWh)", 0.5, 5.0, usage["AC"])
+sim_lights = st.slider("Lights Usage (kWh)", 0.1, 1.0, usage["Lights"])
+sim_appliances = st.slider("Appliances Usage (kWh)", 0.1, 2.0, usage["Appliances"])
+
+sim_total = sim_ac + sim_lights + sim_appliances
+st.write(f"Total Simulated Usage: **{sim_total} kWh**")
+st.write("AI would recommend:")
+sim_suggestions = get_ai_suggestions({"AC": sim_ac, "Lights": sim_lights, "Appliances": sim_appliances}, st.session_state.user_prefs)
+for s in sim_suggestions:
+    st.info("🤖 " + (translations[s] if arabic_mode and s in translations else s))
+
+st.caption("🔁 Powered by Eterna AI — Predict. Advise. Save.")
