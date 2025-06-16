@@ -9,6 +9,7 @@ import plotly.express as px
 import time
 import pytz
 import random
+from sklearn.linear_model import LinearRegression
 
 # --- Helper Functions ---
 
@@ -196,6 +197,17 @@ st.session_state.usage_history.append(total_usage)
 
 st.metric("Total Energy Used (kWh)", total_usage)
 st.bar_chart(pd.DataFrame(usage.values(), index=usage.keys(), columns=["kWh"]))
+from sklearn.linear_model import LinearRegression
+import numpy as np
+
+def train_and_predict_energy(usage_history):
+    days = np.array(list(range(len(usage_history)))).reshape(-1, 1)
+    values = np.array(usage_history).reshape(-1, 1)
+    model = LinearRegression()
+    model.fit(days, values)
+    next_day = np.array([[len(usage_history)]])
+    prediction = model.predict(next_day)[0][0]
+    return round(prediction, 2)
 
 # --- Azure ML Simulated Prediction ---
 if len(st.session_state.usage_history) > 2:
