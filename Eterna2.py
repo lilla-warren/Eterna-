@@ -10,6 +10,13 @@ import time
 import pytz
 import random
 
+def generate_mock_usage():
+    return {
+        "AC": round(random.uniform(1.5, 3.0), 2),
+        "Lights": round(random.uniform(0.3, 0.6), 2),
+        "Appliances": round(random.uniform(0.5, 1.0), 2)
+    }
+
 # ========================
 # 🏗️ CORE SYSTEM SETUP
 # ========================
