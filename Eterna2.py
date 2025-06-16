@@ -10,6 +10,13 @@ import time
 import pytz
 import random
 from sklearn.linear_model import LinearRegression
+# --- Session State Setup ---
+if "registered" not in st.session_state:
+    st.session_state.registered = False
+if "user_prefs" not in st.session_state:
+    st.session_state.user_prefs = {}
+if "usage_history" not in st.session_state:
+    st.session_state.usage_history = []
 
 # --- Helper Functions ---
 
