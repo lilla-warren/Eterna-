@@ -16,6 +16,13 @@ def generate_mock_usage():
         "Lights": round(random.uniform(0.3, 0.6), 2),
         "Appliances": round(random.uniform(0.5, 1.0), 2)
     }
+# --- Session State Initialization ---
+if "registered" not in st.session_state:
+    st.session_state.registered = False
+if "user_prefs" not in st.session_state:
+    st.session_state.user_prefs = {}
+if "usage_history" not in st.session_state:
+    st.session_state.usage_history = []
 
 # ========================
 # 🏗️ CORE SYSTEM SETUP
